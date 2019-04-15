@@ -6,10 +6,11 @@
 
 
 // exemplo de uma função para imprimir o estado (Tabuleiro)
-void printa(ESTADO e) {
-
+void printa(ESTADO e)
+{
     char c = ' ';
 
+    printf("\n");
 
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -33,20 +34,134 @@ void printa(ESTADO e) {
         printf("\n");
     }
 
+    printf("\n");
+    if (e.peca == VALOR_O) printf("O jogador atual é: O");
+    else printf("O jogador atual é: X");
+    printf("\n");
 }
 
+void jogada(ESTADO *e, int l, int c){
+    l -= 49;  //subtrai-se 48 do código ASCII e 1 pois a posição (1,1) corresponde à posição (0,0) da grelha
+    c -= 49;
+    int x = 0;
 
-void escolheModoJogo (ESTADO *e) {
+    for (int i = 0; i < 8; i++){
+        if (verifica_jogada(i, e, l, c)) {
+            switch (i) {
+                case 0: executa_jogada(i, e, l-1, c-1);
+                    break;
+                case 1: executa_jogada(i, e, l-1, c);
+                    break;
+                case 2: executa_jogada(i, e, l-1, c+1);
+                    break;
+                case 3: executa_jogada(i, e, l, c+1);
+                    break;
+                case 4: executa_jogada(i, e, l+1, c+1);
+                    break;
+                case 5: executa_jogada(i, e, l+1, c);
+                    break;
+                case 6: executa_jogada(i, e, l+1, c-1);
+                    break;
+                case 7: executa_jogada(i, e, l, c-1);
+                    break;
+            }
+            x = 1;
+        }
+    }
 
-    printf ("Escolha o modo de jogo que quer:\n  0 - Contra outro jogador (manual)\n  1 - Contra o computador!\n\n");
+    if (x) {
+        (*e).grelha[l][c] = (*e).peca;
+        if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
+        else (*e).peca = VALOR_X;
+    }
+}
 
-    scanf("%c", &(*e).modo);
+int verifica_jogada(int i, ESTADO *e, int l, int c){
+    int x = 0;
+    VALOR peca = (*e).peca;
+    VALOR peca_adversario;
 
+    if (peca == VALOR_X) peca_adversario = VALOR_O;
+    else peca_adversario = VALOR_X;
 
-    while ((*e).modo!='0' && (*e).modo!='1') {
+    if ((*e).grelha[l][c] != VAZIA) return 0;
 
-        printf("Introduza um modo de jogo válido!:\n");
+    switch (i){
+        case 0: {
+            if ((*e).grelha[l-1][c-1] == peca_adversario && (*e).grelha[l-2][c-2] == peca) x = 1;
+            else if ((*e).grelha[l-1][c-1] == peca_adversario && (*e).grelha[l-2][c-2] == peca_adversario) x = verifica_jogada(i, e, l-1, c-1);
+            break;
+        }
+        case 1: {
+            if ((*e).grelha[l-1][c] == peca_adversario && (*e).grelha[l-2][c] == peca) x = 1;
+            else if ((*e).grelha[l-1][c] == peca_adversario && (*e).grelha[l-2][c] == peca_adversario) x = verifica_jogada(i, e, l-1, c);
+            break;
+        }
+        case 2: {
+            if ((*e).grelha[l-1][c+1] == peca_adversario && (*e).grelha[l-2][c+2] == peca) x = 1;
+            else if ((*e).grelha[l-1][c+1] == peca_adversario && (*e).grelha[l-2][c+2] == peca_adversario) x = verifica_jogada(i, e, l-1, c+1);
+            break;
+        }
+        case 3: {
+            if ((*e).grelha[l][c+1] == peca_adversario && (*e).grelha[l][c+2] == peca) x = 1;
+            else if ((*e).grelha[l][c+1] == peca_adversario && (*e).grelha[l][c+2] == peca_adversario) x = verifica_jogada(i, e, l, c+1);
+            break;
+        }
+        case 4: {
+            if ((*e).grelha[l+1][c+1] == peca_adversario && (*e).grelha[l+2][c+2] == peca) x = 1;
+            else if ((*e).grelha[l+1][c+1] == peca_adversario && (*e).grelha[l+2][c+2] == peca_adversario) x = verifica_jogada(i, e, l+1, c+1);
+            break;
+        }
+        case 5: {
+            if ((*e).grelha[l+1][c] == peca_adversario && (*e).grelha[l+2][c] == peca) x = 1;
+            else if ((*e).grelha[l+1][c] == peca_adversario && (*e).grelha[l+2][c] == peca_adversario) x = verifica_jogada(i, e, l+1, c);
+            break;
+        }
+        case 6: {
+            if ((*e).grelha[l+1][c-1] == peca_adversario && (*e).grelha[l+2][c-2] == peca) x = 1;
+            else if ((*e).grelha[l+1][c-1] == peca_adversario && (*e).grelha[l+2][c-2] == peca_adversario) x = verifica_jogada(i, e, l+1, c-1);
+            break;
+        }
+        case 7: {
+            if ((*e).grelha[l][c-1] == peca_adversario && (*e).grelha[l][c-2] == peca) x = 1;
+            else if ((*e).grelha[l][c-1] == peca_adversario && (*e).grelha[l][c-2] == peca_adversario) x = verifica_jogada(i, e, l, c-1);
+            break;
+        }
+    }
+    return x;
+}
 
-        scanf("%c", &(*e).modo);}
+void executa_jogada(int i, ESTADO *e, int l, int c) {
 
+    VALOR peca = (*e).peca;
+
+    if ((*e).grelha[l][c] != peca) {
+
+        (*e).grelha[l][c] = peca;
+
+        switch (i) {
+            case 0: executa_jogada(i, e, l-1, c-1);
+                break;
+            case 1: executa_jogada(i, e, l-1, c);
+                break;
+            case 2: executa_jogada(i, e, l-1, c+1);
+                break;
+            case 3: executa_jogada(i, e, l, c+1);
+                break;
+            case 4: executa_jogada(i, e, l+1, c+1);
+                break;
+            case 5: executa_jogada(i, e, l+1, c);
+                break;
+            case 6: executa_jogada(i, e, l+1, c-1);
+                break;
+            case 7: executa_jogada(i, e, l, c-1);
+                break;
+        }
+    }
+}
+
+void novo_jogo(ESTADO *e, char peca){
+
+    if (peca == 'X') (*e).peca = VALOR_X;
+    else (*e).peca = VALOR_O;
 }

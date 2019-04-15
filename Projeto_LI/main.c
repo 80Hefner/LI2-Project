@@ -1,11 +1,9 @@
-#include <stdio.h>
 #include "estado.h"
 
 
-int main()
-{
+int main() {
     ESTADO e = {0};
-
+    char opcao[50];
 
     // estado inicial do tabuleiro. Inicio do jogo!
     e.grelha[3][4] = VALOR_X;
@@ -13,16 +11,26 @@ int main()
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
 
+    fgets(opcao, 50, stdin);
 
-    //e.grelha[2][2] = VALOR_X;
+    while (toupper(opcao[0]) != 'Q') {
 
-    escolheModoJogo (&e);
-    if (e.modo == '0') printf("Esta a jogar em modo Manual.\n");
-    if (e.modo == '1') (printf("Esta a jogar contra o CPU.\n"));
+        switch (toupper(opcao[0])) {
+            case 'N': {
+                novo_jogo(&e, toupper(opcao[2]));
+                printa(e);
+                fgets(opcao, 50, stdin);
+                break;
+            }
+            case 'J' : {
+                jogada(&e, opcao[2], opcao[4]);
+                printa(e);
+                fgets(opcao, 50, stdin);
+                break;
+            }
+        }
 
-    printf("\n");
-    printa(e);
-    printf("\n");
+    }
 
     return 0;
 }

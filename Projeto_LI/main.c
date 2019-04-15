@@ -15,21 +15,28 @@ int main() {
 
     while (toupper(opcao[0]) != 'Q') {
 
+
         switch (toupper(opcao[0])) {
             case 'N': {
                 novo_jogo(&e, toupper(opcao[2]));
-                printa(e);
                 fgets(opcao, 50, stdin);
                 break;
             }
-            case 'J' : {
+            case 'J': {
                 jogada(&e, opcao[2], opcao[4]);
-                printa(e);
                 fgets(opcao, 50, stdin);
                 break;
             }
         }
 
+        if (verifica_fim_jogo(e) == 1) {
+            opcao[0] = 'Q';
+            printf("O jogador X ganhou");
+        }
+        else if (verifica_fim_jogo(e) == 2) {
+            opcao[0] = 'Q';
+            printf("O jogador O ganhou");
+        }
     }
 
     return 0;

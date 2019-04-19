@@ -1,9 +1,10 @@
 #include "estado.h"
 #include "jogo.h"
+#include "stack.h"
 
 
 int main() {
-    ESTADO e = {0};
+    //ESTADO e = {0};
     char opcao[50];
 
 
@@ -14,7 +15,7 @@ int main() {
 
         switch (toupper(opcao[0])) {
             case 'N': {
-                jogovsplayer(&e, opcao);
+                jogovsplayer(opcao);
                 break;
             }
         }

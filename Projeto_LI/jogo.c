@@ -4,7 +4,7 @@
 
 #include "jogo.h"
 #include "estado.h"
-
+#include "stack.h"
 
 
 void jogada(ESTADO *e, int l, int c) {
@@ -52,6 +52,7 @@ void jogada(ESTADO *e, int l, int c) {
         (*e).grelha[l][c] = (*e).peca;
         if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
         else (*e).peca = VALOR_X;
+        push(*e);
         printa(*e);
     }
     else printf("Jogada inválida!\n");
@@ -164,57 +165,67 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
     }
 }
 
-void jogovsplayer(ESTADO *e, char *opcao){
+void jogovsplayer(char *opcao){
 
-    if (toupper(opcao[2]) == 'X') (*e).peca = VALOR_X;
-    else (*e).peca = VALOR_O;
+    ESTADO e = {0};
+
+    if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
+    else e.peca = VALOR_O;
 
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
-            (*e).grelha[i][j] = VAZIA;
+            e.grelha[i][j] = VAZIA;
         }
     }
 
-    (*e).grelha[3][4] = VALOR_X;
-    (*e).grelha[4][3] = VALOR_X;
-    (*e).grelha[3][3] = VALOR_O;
-    (*e).grelha[4][4] = VALOR_O;
-    (*e).modo = '0';
+    e.grelha[3][4] = VALOR_X;
+    e.grelha[4][3] = VALOR_X;
+    e.grelha[3][3] = VALOR_O;
+    e.grelha[4][4] = VALOR_O;
+    e.modo = '0';
 
-    printa(*e);
+    push(e);
+    printa(e);
 
 
-    while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(*e)) {
+    while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
 
-        if (verifica_turno(*e)) {
+        if (verifica_turno(e)) {
             printf("\nInsira o seu comando: ");
             fgets(opcao, 50, stdin);
 
             switch (toupper(opcao[0])) {
                 case 'J': {
-                    jogada(e, opcao[2], opcao[4]);
+                    jogada(&e, opcao[2], opcao[4]);
+                    break;
+                }
+                case 'U': {
+                    pop(&e);
+                    printa(e);
                     break;
                 }
             }
         }
         else {
-            if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
-            else (*e).peca = VALOR_X;
+            if (e.peca == VALOR_X) e.peca = VALOR_O;
+            else e.peca = VALOR_X;
 
             printf("O jogador não tem jogadas possíveis.\n");
-            printa(*e);
+            printa(e);
         }
     }
 
-    if (verifica_fim_jogo(*e) == 1) {
+    if (verifica_fim_jogo(e) == 1) {
         opcao[0] = 'Q';
         printf("\nO jogador X ganhou!!!");
     }
-    else if (verifica_fim_jogo(*e) == 2) {
+    else if (verifica_fim_jogo(e) == 2) {
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!");
     }
     else printf("Jogo interrompido.\n");
+
+    reinicia_stack();
 }
 
 

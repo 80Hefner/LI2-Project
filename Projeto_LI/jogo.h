@@ -11,7 +11,7 @@
 void jogada(ESTADO *e, int linha, int coluna);
 int verifica_jogada(int i, ESTADO *e, int l, int c);
 void executa_jogada(int i, ESTADO *e, int l, int c);
-void jogovsplayer(ESTADO *e, char *opcao);
+void jogovsplayer(char *opcao);
 int verifica_fim_jogo(ESTADO e);
 int verifica_turno(ESTADO e);
 int conta_pontos(ESTADO e, int jogador);

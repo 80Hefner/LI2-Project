@@ -5,6 +5,7 @@
 #include "jogo.h"
 #include "estado.h"
 #include "stack.h"
+#include "movimentoValidos.h"
 
 
 void jogada(ESTADO *e, int l, int c) {
@@ -12,7 +13,7 @@ void jogada(ESTADO *e, int l, int c) {
     c -= 49;
     int x = 0;  // x=1 se o jogador efetuar uma jogada com sucesso; x=0 se o jogador efetuar uma jogada inválida
 
-    if ((*e).grelha[l][c] == VAZIA) {
+    if ((*e).grelha[l][c] != VALOR_X && (*e).grelha[l][c] != VALOR_O) {
 
         for (int i = 0; i < 8; i++) {
             if (verifica_jogada(i, e, l, c)) {
@@ -53,7 +54,7 @@ void jogada(ESTADO *e, int l, int c) {
         if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
         else (*e).peca = VALOR_X;
         push(*e);
-        printa(*e);
+        printa(calculaMovimentosValidos ((*e).peca , e));
     }
     else printf("Jogada inválida!\n");
 
@@ -185,7 +186,7 @@ void jogovsplayer(char *opcao){
     e.modo = '0';
 
     push(e);
-    printa(e);
+    printa(calculaMovimentosValidos ((e.peca) , &e));
 
 
     while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
@@ -201,7 +202,13 @@ void jogovsplayer(char *opcao){
                 }
                 case 'U': {
                     pop(&e);
-                    printa(e);
+                    printa(calculaMovimentosValidos ((e.peca) , &e));
+                    break;
+                }
+
+                case '?' : {
+                    printa(calculaMovimentosValidos ((e.peca) , &e));
+                    menuAjuda();
                     break;
                 }
             }
@@ -283,4 +290,12 @@ int conta_pontos (ESTADO e, int jogador){
         }
     }
     return conta;
+}
+
+// Função que quando se pressione '?' aparece um menu de ajuda com todas as opções;
+void menuAjuda () {
+    printf("- Presse n ou N para comecar um novo Jogo!\n");
+    printf("- Presse j ou J para realizar uma jogada inserindo depois a linha e a coluna!\n");
+    printf("- Presse q ou Q para sair do Jogo!\n");
+    printf("- Presse ? a qualquer momento para ajuda!\n");
 }

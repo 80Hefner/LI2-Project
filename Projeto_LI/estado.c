@@ -27,15 +27,21 @@ void printa(ESTADO e)
                     c = '-';
                     break;
                 }
+                case SUG: {
+                    c = '.';
+                    break;
+                }
             }
             printf("%c ", c);
 
         }
         printf("\n");
+
     }
 
     //printf("\n");
     if (e.peca == VALOR_O) printf("(O)");
     else printf("(X)");
+    printf("\n(? - Help)\n");
     printf("\n");
 }

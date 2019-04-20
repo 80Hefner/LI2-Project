@@ -15,6 +15,7 @@ void jogovsplayer(char *opcao);
 int verifica_fim_jogo(ESTADO e);
 int verifica_turno(ESTADO e);
 int conta_pontos(ESTADO e, int jogador);
+void menuAjuda ();
 
 
 

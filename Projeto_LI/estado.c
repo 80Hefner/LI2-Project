@@ -43,5 +43,4 @@ void printa(ESTADO e)
     if (e.peca == VALOR_O) printf("(O)");
     else printf("(X)");
     printf("\n(? - Help)\n");
-    printf("\n");
 }

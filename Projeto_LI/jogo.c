@@ -186,7 +186,7 @@ void jogovsplayer(char *opcao){
     e.modo = '0';
 
     push(e);
-    printa(calculaMovimentosValidos ((e.peca) , &e));
+    printa(e);
 
 
     while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
@@ -202,12 +202,14 @@ void jogovsplayer(char *opcao){
                 }
                 case 'U': {
                     pop(&e);
+                    printa(e);
+                    break;
+                }
+                case 'S' : {
                     printa(calculaMovimentosValidos ((e.peca) , &e));
                     break;
                 }
-
-                case '?' : {
-                    printa(calculaMovimentosValidos ((e.peca) , &e));
+                case '?': {
                     menuAjuda();
                     break;
                 }

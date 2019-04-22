@@ -17,8 +17,11 @@ int main() {
 
         switch (toupper(opcao[0])) {
             case 'N': {
-                jogovsplayer(opcao);
+                novo_jogo(opcao);
                 break;
+            }
+            case 'L': {
+                ler_jogo(opcao);
             }
         }
 

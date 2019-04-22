@@ -8,9 +8,9 @@
 #include "movimentoValidos.h"
 #include "ficheiro.h"
 
-
-void jogovsplayer(char *opcao){
-
+//Função que cria uma variável do tipo ESTADO e prepara-a para um novo jogo
+void novo_jogo(char *opcao)
+{
     ESTADO e = {0};
 
     if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
@@ -28,9 +28,15 @@ void jogovsplayer(char *opcao){
     e.grelha[4][4] = VALOR_O;
     e.modo = '0';
 
+    jogovsplayer(opcao, e);
+}
+
+// Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial.
+// Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
+void jogovsplayer(char *opcao, ESTADO e){
+
     push(e);
     printa(e);
-
 
     while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
 
@@ -70,11 +76,11 @@ void jogovsplayer(char *opcao){
         }
     }
 
-    if (verifica_fim_jogo(e) == 1) {
+    if (verifica_fim_jogo(e) == 'X') {
         opcao[0] = 'Q';
         printf("\nO jogador X ganhou!!!");
     }
-    else if (verifica_fim_jogo(e) == 2) {
+    else if (verifica_fim_jogo(e) == 'O') {
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!");
     }
@@ -83,6 +89,8 @@ void jogovsplayer(char *opcao){
     reinicia_stack();
 }
 
+
+// Recebe o estado do jogo e a posição onde se quer efetuar a jogada. Testa se a jogada é possível e executa-a
 void jogada(ESTADO *e, int l, int c) {
     l -= 49;  //subtrai-se 48 do código ASCII e 1 pois a posição (1,1) corresponde à posição (0,0) da grelha
     c -= 49;
@@ -135,6 +143,9 @@ void jogada(ESTADO *e, int l, int c) {
 
 }
 
+// Recebe um indicador i (0 se verificar a jogador para a esquerda/cima; 1 para cima; 2 para a direita/cima;
+// 3 para a direita; 4 para a direita/baixo; 5 para baixo; 6 para a esquerda/baixo; 7 para a esquerda), o estado do jogo
+// e a posição para a qual quer verificar a jogada
 int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada for possível
     int x = 0;
     VALOR peca = (*e).peca;
@@ -212,6 +223,7 @@ int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada fo
     return x;
 }
 
+// Recebe o indicador da jogada, o estado do jogo e uma posição e executa uma jogada
 void executa_jogada(int i, ESTADO *e, int l, int c) {
 
     VALOR peca = (*e).peca;
@@ -242,8 +254,9 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
 }
 
 
-int verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 1 se o jogador X ganhou; 2 se o jogador O ganhou.
-    int x = 1;
+// Recebe o estado do jogo e verifica se este terminou
+char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o jogador X ganhou; 'O' se o jogador O ganhou.
+    char x = 1;
     ESTADO e2 = e;
 
     if (e.peca == VALOR_X) e2.peca = VALOR_O;
@@ -255,17 +268,16 @@ int verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 1 se o jog
         }
     }
 
-    if (!verifica_turno(e) && !verifica_turno(e2)) x = 1;
-
-    if (x == 1){
-        if (conta_pontos(e, 1) > conta_pontos(e, 2)) x = 1;
-        else x = 2;
+    if (!verifica_turno(e) && !verifica_turno(e2)){
+        if (conta_pontos(e, 'X') > conta_pontos(e, 'O')) x = 'X';
+        else x = 'O';
     }
 
     return x;
 }
 
-int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas
+// Recebe o estado do jogo e verifica se o próximo jogador tem jogadas disponíveis
+int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas; 0 caso contrário
 
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
@@ -278,17 +290,17 @@ int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas
     return 0;
 }
 
-
-int conta_pontos (ESTADO e, int jogador){
+// Recebe o estado do jogo e o char correspondente a um jogador e conta o seu número de pontos
+int conta_pontos (ESTADO e, char jogador){
     int conta = 0;
 
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             switch (jogador){
-                case 1:
+                case 'X':
                     if (e.grelha[i][j] == VALOR_X) conta++;
                     break;
-                case 2:
+                case 'O':
                     if (e.grelha[i][j] == VALOR_O) conta++;
                     break;
             }

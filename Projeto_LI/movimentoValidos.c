@@ -21,6 +21,8 @@ int verifica_Movimento (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
     return verifica_Movimento(who,vl,vc,l+vl,c+vl,e);
 }
 
+
+/*
 // Função que vê numa direção se movimento é valido
 int movimento_valido (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
     VALOR adversario;
@@ -35,6 +37,8 @@ int movimento_valido (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
 
     return verifica_Movimento (who, l, c, l+vl+vl, c+vc+vc, e);
 }
+ */
+
 
 // Função que vai returnar um estado com as posições que possam ser sugeridas para movimentos validos
 ESTADO calculaMovimentosValidos (VALOR who, ESTADO e) {
@@ -49,16 +53,16 @@ ESTADO calculaMovimentosValidos (VALOR who, ESTADO e) {
     for (int l = 0; l < 8; l++) {
         for (int c = 0; c < 8; c++) {
             if (e.grelha [l][c] == VAZIA) {
-                int no = movimento_valido (who,-1,-1,l,c,&e);
-                int nn = movimento_valido (who,-1, 0,l,c,&e);
-                int ne = movimento_valido (who,-1, 1,l,c,&e);
+                int no = verifica_jogada(0, &e, l, c);
+                int nn = verifica_jogada(1, &e, l, c);
+                int ne = verifica_jogada(2, &e, l, c);
 
-                int oo = movimento_valido (who, 0,-1,l,c,&e);
-                int ee = movimento_valido (who, 0, 1,l,c,&e);
+                int oo = verifica_jogada(7, &e, l, c);
+                int ee = verifica_jogada(3, &e, l, c);
 
-                int so = movimento_valido (who, 1,-1,l,c,&e);
-                int ss = movimento_valido (who, 1, 0,l,c,&e);
-                int se = movimento_valido (who, 1, 1,l,c,&e);
+                int so = verifica_jogada(4, &e, l, c);
+                int ss = verifica_jogada(5, &e, l, c);
+                int se = verifica_jogada(6, &e, l, c);
 
                 if (no || nn || ne || oo || ee || so || ss || se) {
                     e.grelha [l][c] = SUG;

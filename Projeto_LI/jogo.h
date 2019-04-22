@@ -8,13 +8,14 @@
 #define PROJ_JOGO_H
 
 
+void novo_jogo(char *opcao);
+void jogovsplayer(char *opcao, ESTADO e);
 void jogada(ESTADO *e, int linha, int coluna);
 int verifica_jogada(int i, ESTADO *e, int l, int c);
 void executa_jogada(int i, ESTADO *e, int l, int c);
-void jogovsplayer(char *opcao);
-int verifica_fim_jogo(ESTADO e);
+char verifica_fim_jogo(ESTADO e);
 int verifica_turno(ESTADO e);
-int conta_pontos(ESTADO e, int jogador);
+int conta_pontos(ESTADO e, char jogador);
 void menuAjuda ();
 
 

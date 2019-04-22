@@ -8,5 +8,6 @@
 #include "estado.h"
 
 void grava_jogo (char *opcao, ESTADO e);
+void ler_jogo (char *opcao);
 
 #endif //PROJ_FICHEIRO_H

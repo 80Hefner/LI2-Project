@@ -8,7 +8,7 @@
 #ifndef PROJ_MOVIMENTOVALIDOS_H
 #define PROJ_MOVIMENTOVALIDOS_H
 
-ESTADO calculaMovimentosValidos (VALOR who, ESTADO *e);
+ESTADO calculaMovimentosValidos (VALOR who, ESTADO e);
 int movimento_valido (VALOR who, int vl, int vc, int l, int c, ESTADO *e);
 int verifica_Movimento (VALOR who, int vl, int vc, int l, int c, ESTADO *e);
 

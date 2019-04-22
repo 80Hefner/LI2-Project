@@ -2,6 +2,7 @@
 #include "jogo.h"
 #include "stack.h"
 #include "movimentoValidos.h"
+#include "ficheiro.h"
 
 
 int main() {

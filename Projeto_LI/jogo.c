@@ -6,7 +6,82 @@
 #include "estado.h"
 #include "stack.h"
 #include "movimentoValidos.h"
+#include "ficheiro.h"
 
+
+void jogovsplayer(char *opcao){
+
+    ESTADO e = {0};
+
+    if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
+    else e.peca = VALOR_O;
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            e.grelha[i][j] = VAZIA;
+        }
+    }
+
+    e.grelha[3][4] = VALOR_X;
+    e.grelha[4][3] = VALOR_X;
+    e.grelha[3][3] = VALOR_O;
+    e.grelha[4][4] = VALOR_O;
+    e.modo = '0';
+
+    push(e);
+    printa(e);
+
+
+    while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
+
+        if (verifica_turno(e)) {
+            printf("\nInsira o seu comando: ");
+            fgets(opcao, 50, stdin);
+
+            switch (toupper(opcao[0])) {
+                case 'J': {
+                    jogada(&e, opcao[2], opcao[4]);
+                    break;
+                }
+                case 'U': {
+                    pop(&e);
+                    printa(e);
+                    break;
+                }
+                case 'S' : {
+                    printa(calculaMovimentosValidos ((e.peca) , e));
+                    break;
+                }
+                case '?': {
+                    menuAjuda();
+                    break;
+                }
+                case 'E': {
+                    grava_jogo(opcao, e);
+                }
+            }
+        }
+        else {
+            if (e.peca == VALOR_X) e.peca = VALOR_O;
+            else e.peca = VALOR_X;
+
+            printf("O jogador não tem jogadas possíveis.\n");
+            printa(e);
+        }
+    }
+
+    if (verifica_fim_jogo(e) == 1) {
+        opcao[0] = 'Q';
+        printf("\nO jogador X ganhou!!!");
+    }
+    else if (verifica_fim_jogo(e) == 2) {
+        opcao[0] = 'Q';
+        printf("\nO jogador O ganhou!!!");
+    }
+    else printf("Jogo interrompido.\n");
+
+    reinicia_stack();
+}
 
 void jogada(ESTADO *e, int l, int c) {
     l -= 49;  //subtrai-se 48 do código ASCII e 1 pois a posição (1,1) corresponde à posição (0,0) da grelha
@@ -54,7 +129,7 @@ void jogada(ESTADO *e, int l, int c) {
         if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
         else (*e).peca = VALOR_X;
         push(*e);
-        printa(calculaMovimentosValidos ((*e).peca , e));
+        printa(*e);
     }
     else printf("Jogada inválida!\n");
 
@@ -166,77 +241,6 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
     }
 }
 
-void jogovsplayer(char *opcao){
-
-    ESTADO e = {0};
-
-    if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
-    else e.peca = VALOR_O;
-
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
-            e.grelha[i][j] = VAZIA;
-        }
-    }
-
-    e.grelha[3][4] = VALOR_X;
-    e.grelha[4][3] = VALOR_X;
-    e.grelha[3][3] = VALOR_O;
-    e.grelha[4][4] = VALOR_O;
-    e.modo = '0';
-
-    push(e);
-    printa(e);
-
-
-    while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
-
-        if (verifica_turno(e)) {
-            printf("\nInsira o seu comando: ");
-            fgets(opcao, 50, stdin);
-
-            switch (toupper(opcao[0])) {
-                case 'J': {
-                    jogada(&e, opcao[2], opcao[4]);
-                    break;
-                }
-                case 'U': {
-                    pop(&e);
-                    printa(e);
-                    break;
-                }
-                case 'S' : {
-                    printa(calculaMovimentosValidos ((e.peca) , &e));
-                    break;
-                }
-                case '?': {
-                    menuAjuda();
-                    break;
-                }
-            }
-        }
-        else {
-            if (e.peca == VALOR_X) e.peca = VALOR_O;
-            else e.peca = VALOR_X;
-
-            printf("O jogador não tem jogadas possíveis.\n");
-            printa(e);
-        }
-    }
-
-    if (verifica_fim_jogo(e) == 1) {
-        opcao[0] = 'Q';
-        printf("\nO jogador X ganhou!!!");
-    }
-    else if (verifica_fim_jogo(e) == 2) {
-        opcao[0] = 'Q';
-        printf("\nO jogador O ganhou!!!");
-    }
-    else printf("Jogo interrompido.\n");
-
-    reinicia_stack();
-}
-
 
 int verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 1 se o jogador X ganhou; 2 se o jogador O ganhou.
     int x = 1;
@@ -273,7 +277,6 @@ int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas
 
     return 0;
 }
-
 
 
 int conta_pontos (ESTADO e, int jogador){

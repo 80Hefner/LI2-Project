@@ -7,7 +7,7 @@
 #include "stack.h"
 
 //Inserir elementos no inicio
-void push(ESTADO e)
+void push(ESTADO e, NODE **stack)
 {
     //criar um novo nodo temp e alocar memoria
     NODE* temp;
@@ -22,46 +22,46 @@ void push(ESTADO e)
     temp->e = e;
 
     //direcionar o apontador top para temp
-    temp->next = top;
+    temp->next = *stack;
 
     //tornar temp o topo da stack
-    top = temp;
+    *stack = temp;
 }
 
 
 //Remover o elemento no topo da stack
-void pop(ESTADO *e)
+void pop(ESTADO *e, NODE **stack)
 {
     NODE* temp;
 
     //verificar se esta vazia
-    if (top->next == NULL)
+    if ((*stack)->next == NULL)
         printf("\nImpossível retroceder mais.\n");
     else {
         //top fica com o valor de temp
-        temp = top;
+        temp = (*stack);
 
         //o nodo seguinte passa a ser o topo
-        top = top->next;
+        (*stack) = (*stack)->next;
 
         //libertar memoria do nodo de topo
         free(temp);
 
         //atualiza o estado do jogo
-        *e = top->e;
+        *e = (*stack)->e;
     }
 }
 
 
 //Limpa a stack após o fim de um jogo
-void reinicia_stack()
+void reinicia_stack(NODE **stack)
 {
     NODE* temp;
 
-    while(top){
-        temp = top->next;
-        free(top);
-        top = temp;
+    while(stack){
+        temp = (*stack)->next;
+        free(stack);
+        *stack = temp;
     }
 
 }

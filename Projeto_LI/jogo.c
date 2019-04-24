@@ -9,7 +9,7 @@
 #include "ficheiro.h"
 
 //Função que cria uma variável do tipo ESTADO e prepara-a para um novo jogo
-void novo_jogo(char *opcao)
+void novo_jogo(char *opcao, NODE **stack)
 {
     ESTADO e = {0};
 
@@ -28,14 +28,14 @@ void novo_jogo(char *opcao)
     e.grelha[4][4] = VALOR_O;
     e.modo = '0';
 
-    jogovsplayer(opcao, e);
+    jogovsplayer(opcao, e, stack);
 }
 
 // Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial.
 // Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
-void jogovsplayer(char *opcao, ESTADO e){
+void jogovsplayer(char *opcao, ESTADO e, NODE **stack){
 
-    push(e);
+    push(e, stack);
     printa(e);
 
     while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
@@ -46,11 +46,11 @@ void jogovsplayer(char *opcao, ESTADO e){
 
             switch (toupper(opcao[0])) {
                 case 'J': {
-                    jogada(&e, opcao[2], opcao[4]);
+                    jogada(&e, opcao[2], opcao[4], stack);
                     break;
                 }
                 case 'U': {
-                    pop(&e);
+                    pop(&e, stack);
                     printa(e);
                     break;
                 }
@@ -86,12 +86,12 @@ void jogovsplayer(char *opcao, ESTADO e){
     }
     else printf("Jogo interrompido.\n");
 
-    reinicia_stack();
+    reinicia_stack(stack);
 }
 
 
 // Recebe o estado do jogo e a posição onde se quer efetuar a jogada. Testa se a jogada é possível e executa-a
-void jogada(ESTADO *e, int l, int c) {
+void jogada(ESTADO *e, int l, int c, NODE **stack) {
     l -= 49;  //subtrai-se 48 do código ASCII e 1 pois a posição (1,1) corresponde à posição (0,0) da grelha
     c -= 49;
     int x = 0;  // x=1 se o jogador efetuar uma jogada com sucesso; x=0 se o jogador efetuar uma jogada inválida
@@ -136,7 +136,7 @@ void jogada(ESTADO *e, int l, int c) {
         (*e).grelha[l][c] = (*e).peca;
         if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
         else (*e).peca = VALOR_X;
-        push(*e);
+        push(*e, stack);
         printa(*e);
     }
     else printf("Jogada inválida!\n");

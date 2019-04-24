@@ -6,8 +6,9 @@
 #define PROJ_FICHEIRO_H
 
 #include "estado.h"
+#include "stack.h"
 
 void grava_jogo (char *opcao, ESTADO e);
-void ler_jogo (char *opcao);
+void ler_jogo (char *opcao, NODE **stack);
 
 #endif //PROJ_FICHEIRO_H

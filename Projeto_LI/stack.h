@@ -12,10 +12,10 @@ typedef struct Node {
     ESTADO e;
     struct Node* next;
 }NODE;
-NODE* top;
 
-void push(ESTADO e);
-void pop(ESTADO *e);
-void reinicia_stack();
+
+void push(ESTADO e, NODE **stack);
+void pop(ESTADO *e, NODE **stack);
+void reinicia_stack(NODE **stack);
 
 #endif //PROJ_STACK_H

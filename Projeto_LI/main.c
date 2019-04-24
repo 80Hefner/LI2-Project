@@ -8,6 +8,7 @@
 int main() {
     //ESTADO e = {0};
     char opcao[50];
+    static NODE* stack = NULL;
 
 
     printf("Insira o seu comando: ");
@@ -17,11 +18,11 @@ int main() {
 
         switch (toupper(opcao[0])) {
             case 'N': {
-                novo_jogo(opcao);
+                novo_jogo(opcao, &stack);
                 break;
             }
             case 'L': {
-                ler_jogo(opcao);
+                ler_jogo(opcao, &stack);
             }
         }
 

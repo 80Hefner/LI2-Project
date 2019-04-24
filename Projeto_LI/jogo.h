@@ -3,14 +3,15 @@
 //
 
 #include "estado.h"
+#include "stack.h"
 
 #ifndef PROJ_JOGO_H
 #define PROJ_JOGO_H
 
 
-void novo_jogo(char *opcao);
-void jogovsplayer(char *opcao, ESTADO e);
-void jogada(ESTADO *e, int linha, int coluna);
+void novo_jogo(char *opcao, NODE **stack);
+void jogovsplayer(char *opcao, ESTADO e, NODE **stack);
+void jogada(ESTADO *e, int linha, int coluna, NODE **stack);
 int verifica_jogada(int i, ESTADO *e, int l, int c);
 void executa_jogada(int i, ESTADO *e, int l, int c);
 char verifica_fim_jogo(ESTADO e);

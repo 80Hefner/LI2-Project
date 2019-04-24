@@ -61,7 +61,7 @@ void grava_jogo (char *opcao, ESTADO e)
 
 }
 
-void ler_jogo (char *opcao)
+void ler_jogo (char *opcao, NODE **stack)
 {
     FILE *f;
     char aux [50];
@@ -119,7 +119,7 @@ void ler_jogo (char *opcao)
         fclose(f);
 
         // Começa um jogo, a partir da variável e
-        jogovsplayer(opcao, e);
+        jogovsplayer(opcao, e, stack);
 
     }
 

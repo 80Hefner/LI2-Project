@@ -58,9 +58,9 @@ void reinicia_stack(NODE **stack)
 {
     NODE* temp;
 
-    while(stack){
+    while(*stack){
         temp = (*stack)->next;
-        free(stack);
+        free(*stack);
         *stack = temp;
     }
 

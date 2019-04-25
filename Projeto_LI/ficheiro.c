@@ -13,7 +13,6 @@ void grava_jogo (char *opcao, ESTADO e)
 {
     FILE *f;
     char aux [50];
-    ESTADO e_aux;
     char grelha_jogo[8][8];
 
     for (int i = 2; opcao[i] != '\0' ; i++){
@@ -30,25 +29,27 @@ void grava_jogo (char *opcao, ESTADO e)
         fprintf(f, "A ");
 
     if (e.peca == VALOR_X)
-        fprintf(f, "X\n");
+        fprintf(f, "X ");
     else
-        fprintf(f, "O\n");
+        fprintf(f, "O ");
+
+    if (e.modo == '1')
+        fprintf(f, "%c ", e.nivel);
+
+    fprintf(f, "\n");
 
     //A primeira linha está impressa, falta imprimir a grelha do jogo
 
-    e_aux = calculaMovimentosValidos(e.peca, e);
 
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
 
-            if (e_aux.grelha[i][j] == VALOR_X)
+            if (e.grelha[i][j] == VALOR_X)
                 fprintf(f, "X ");
-            else if (e_aux.grelha[i][j] == VALOR_O)
+            else if (e.grelha[i][j] == VALOR_O)
                 fprintf(f, "O ");
-            else if (e_aux.grelha[i][j] == VAZIA)
-                fprintf(f, "- ");
             else
-                fprintf(f, ". ");
+                fprintf(f, "- ");
         }
         fprintf(f, "\n");
     }
@@ -97,6 +98,21 @@ void ler_jogo (char *opcao, NODE **stack)
             e.peca = VALOR_X;
         else
             e.peca = VALOR_O;
+
+        // Atualiza o nível do bot, caso esteja em modo automático
+        if (e.modo == '1'){
+            fscanf(f, "%c", aux);
+            fseek(f, 1, SEEK_CUR);
+
+            if (aux[0] == '1')
+                e.nivel = '1';
+            else if (aux[0] == '2')
+                e.nivel = '2';
+            else
+                e.nivel = '3';
+        }
+
+        fseek(f, 1, SEEK_CUR);
 
         // Atualiza a grelha da variável e, conforme o ficheiro
         for (int i = 0; i < 8; i++){

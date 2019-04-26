@@ -35,6 +35,9 @@ void novo_jogo(char *opcao, NODE **stack)
 // Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
 void jogovsplayer(char *opcao, ESTADO e, NODE **stack){
 
+    e.score_x = conta_pontos(e, 'X');
+    e.score_o = conta_pontos(e, 'O');
+
     push(e, stack);
     printa(e);
 
@@ -96,7 +99,7 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
     c -= 49;
     int x = 0;  // x=1 se o jogador efetuar uma jogada com sucesso; x=0 se o jogador efetuar uma jogada inválida
 
-    if ((*e).grelha[l][c] != VALOR_X && (*e).grelha[l][c] != VALOR_O) {
+    if (e->grelha[l][c] != VALOR_X && e->grelha[l][c] != VALOR_O) {
 
         for (int i = 0; i < 8; i++) {
             if (verifica_jogada(i, e, l, c)) {
@@ -133,9 +136,15 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
 
 
     if (x) {
-        (*e).grelha[l][c] = (*e).peca;
-        if ((*e).peca == VALOR_X) (*e).peca = VALOR_O;
-        else (*e).peca = VALOR_X;
+        e->grelha[l][c] = e->score_x;
+        if (e->peca == VALOR_X) {
+            e->peca = VALOR_O;
+            e->score_x++;
+        }
+        else {
+            e->peca = VALOR_X;
+            e->score_o++;
+        }
         push(*e, stack);
         printa(*e);
     }
@@ -148,7 +157,7 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
 // e a posição para a qual quer verificar a jogada
 int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada for possível
     int x = 0;
-    VALOR peca = (*e).peca;
+    VALOR peca = e->peca;
     VALOR peca_adversario;
 
     if (peca == VALOR_X) peca_adversario = VALOR_O;
@@ -157,64 +166,64 @@ int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada fo
     switch (i){
         case 0: {
             if (c > 1 && l > 1) {
-                if ((*e).grelha[l - 1][c - 1] == peca_adversario && (*e).grelha[l - 2][c - 2] == peca) x = 1;
-                else if ((*e).grelha[l - 1][c - 1] == peca_adversario && (*e).grelha[l - 2][c - 2] == peca_adversario)
+                if (e->grelha[l - 1][c - 1] == peca_adversario && e->grelha[l - 2][c - 2] == peca) x = 1;
+                else if (e->grelha[l - 1][c - 1] == peca_adversario && e->grelha[l - 2][c - 2] == peca_adversario)
                     x = verifica_jogada(i, e, l - 1, c - 1);
             }
             break;
         }
         case 1: {
             if (l > 1) {
-                if ((*e).grelha[l - 1][c] == peca_adversario && (*e).grelha[l - 2][c] == peca) x = 1;
-                else if ((*e).grelha[l - 1][c] == peca_adversario && (*e).grelha[l - 2][c] == peca_adversario)
+                if (e->grelha[l - 1][c] == peca_adversario && e->grelha[l - 2][c] == peca) x = 1;
+                else if (e->grelha[l - 1][c] == peca_adversario && e->grelha[l - 2][c] == peca_adversario)
                     x = verifica_jogada(i, e, l - 1, c);
             }
             break;
         }
         case 2: {
             if (c < 6 && l > 1) {
-                if ((*e).grelha[l - 1][c + 1] == peca_adversario && (*e).grelha[l - 2][c + 2] == peca) x = 1;
-                else if ((*e).grelha[l - 1][c + 1] == peca_adversario && (*e).grelha[l - 2][c + 2] == peca_adversario)
+                if (e->grelha[l - 1][c + 1] == peca_adversario && e->grelha[l - 2][c + 2] == peca) x = 1;
+                else if (e->grelha[l - 1][c + 1] == peca_adversario && e->grelha[l - 2][c + 2] == peca_adversario)
                     x = verifica_jogada(i, e, l - 1, c + 1);
             }
             break;
         }
         case 3: {
             if (c < 6) {
-                if ((*e).grelha[l][c + 1] == peca_adversario && (*e).grelha[l][c + 2] == peca) x = 1;
-                else if ((*e).grelha[l][c + 1] == peca_adversario && (*e).grelha[l][c + 2] == peca_adversario)
+                if (e->grelha[l][c + 1] == peca_adversario && e->grelha[l][c + 2] == peca) x = 1;
+                else if (e->grelha[l][c + 1] == peca_adversario && e->grelha[l][c + 2] == peca_adversario)
                     x = verifica_jogada(i, e, l, c + 1);
             }
             break;
         }
         case 4: {
             if (l < 6 && c < 6) {
-                if ((*e).grelha[l + 1][c + 1] == peca_adversario && (*e).grelha[l + 2][c + 2] == peca) x = 1;
-                else if ((*e).grelha[l + 1][c + 1] == peca_adversario && (*e).grelha[l + 2][c + 2] == peca_adversario)
+                if (e->grelha[l + 1][c + 1] == peca_adversario && e->grelha[l + 2][c + 2] == peca) x = 1;
+                else if (e->grelha[l + 1][c + 1] == peca_adversario && e->grelha[l + 2][c + 2] == peca_adversario)
                     x = verifica_jogada(i, e, l + 1, c + 1);
             }
             break;
         }
         case 5: {
             if (l < 6) {
-                if ((*e).grelha[l + 1][c] == peca_adversario && (*e).grelha[l + 2][c] == peca) x = 1;
-                else if ((*e).grelha[l + 1][c] == peca_adversario && (*e).grelha[l + 2][c] == peca_adversario)
+                if (e->grelha[l + 1][c] == peca_adversario && e->grelha[l + 2][c] == peca) x = 1;
+                else if (e->grelha[l + 1][c] == peca_adversario && e->grelha[l + 2][c] == peca_adversario)
                     x = verifica_jogada(i, e, l + 1, c);
             }
             break;
         }
         case 6: {
             if (l < 6 && c > 1) {
-                if ((*e).grelha[l + 1][c - 1] == peca_adversario && (*e).grelha[l + 2][c - 2] == peca) x = 1;
-                else if ((*e).grelha[l + 1][c - 1] == peca_adversario && (*e).grelha[l + 2][c - 2] == peca_adversario)
+                if (e->grelha[l + 1][c - 1] == peca_adversario && e->grelha[l + 2][c - 2] == peca) x = 1;
+                else if (e->grelha[l + 1][c - 1] == peca_adversario && e->grelha[l + 2][c - 2] == peca_adversario)
                     x = verifica_jogada(i, e, l + 1, c - 1);
             }
             break;
         }
         case 7: {
             if (c > 1) {
-                if ((*e).grelha[l][c - 1] == peca_adversario && (*e).grelha[l][c - 2] == peca) x = 1;
-                else if ((*e).grelha[l][c - 1] == peca_adversario && (*e).grelha[l][c - 2] == peca_adversario)
+                if (e->grelha[l][c - 1] == peca_adversario && e->grelha[l][c - 2] == peca) x = 1;
+                else if (e->grelha[l][c - 1] == peca_adversario && e->grelha[l][c - 2] == peca_adversario)
                     x = verifica_jogada(i, e, l, c - 1);
             }
             break;
@@ -226,11 +235,11 @@ int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada fo
 // Recebe o indicador da jogada, o estado do jogo e uma posição e executa uma jogada
 void executa_jogada(int i, ESTADO *e, int l, int c) {
 
-    VALOR peca = (*e).peca;
+    VALOR peca = e->peca;
 
-    if ((*e).grelha[l][c] != peca) {
+    if (e->grelha[l][c] != peca) {
 
-        (*e).grelha[l][c] = peca;
+        e->grelha[l][c] = peca;
 
         switch (i) {
             case 0: executa_jogada(i, e, l-1, c-1);

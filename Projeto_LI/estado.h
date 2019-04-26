@@ -28,6 +28,8 @@ typedef struct estado {
     VALOR grelha[8][8];
     char modo; // modo em que se está a jogar! 0-> manual, 1-> contra computador
     char nivel; // nivel de dificuldade do bot
+    int score_x; // score do jogador X
+    int score_o; // score do jogador O
 } ESTADO;
 
 void printa(ESTADO);

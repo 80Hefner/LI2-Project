@@ -103,32 +103,7 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
 
         for (int i = 0; i < 8; i++) {
             if (verifica_jogada(i, e, l, c)) {
-                switch (i) {
-                    case 0:
-                        executa_jogada(i, e, l - 1, c - 1);
-                        break;
-                    case 1:
-                        executa_jogada(i, e, l - 1, c);
-                        break;
-                    case 2:
-                        executa_jogada(i, e, l - 1, c + 1);
-                        break;
-                    case 3:
-                        executa_jogada(i, e, l, c + 1);
-                        break;
-                    case 4:
-                        executa_jogada(i, e, l + 1, c + 1);
-                        break;
-                    case 5:
-                        executa_jogada(i, e, l + 1, c);
-                        break;
-                    case 6:
-                        executa_jogada(i, e, l + 1, c - 1);
-                        break;
-                    case 7:
-                        executa_jogada(i, e, l, c - 1);
-                        break;
-                }
+                executa_jogada(i, e, l, c);
                 x = 1;
             }
         }
@@ -136,15 +111,13 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
 
 
     if (x) {
-        e->grelha[l][c] = e->score_x;
-        if (e->peca == VALOR_X) {
+        if (e->peca == VALOR_X)
             e->peca = VALOR_O;
-            e->score_x++;
-        }
-        else {
+        else
             e->peca = VALOR_X;
-            e->score_o++;
-        }
+
+        e->score_x = conta_pontos(*e, 'X');
+        e->score_o = conta_pontos(*e, 'O');
         push(*e, stack);
         printa(*e);
     }
@@ -237,26 +210,34 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
 
     VALOR peca = e->peca;
 
-    if (e->grelha[l][c] != peca) {
+    while (e->grelha[l][c] != peca) {
 
         e->grelha[l][c] = peca;
 
         switch (i) {
-            case 0: executa_jogada(i, e, l-1, c-1);
+            case 0:
+                l--; c--;
                 break;
-            case 1: executa_jogada(i, e, l-1, c);
+            case 1:
+                l--;
                 break;
-            case 2: executa_jogada(i, e, l-1, c+1);
+            case 2:
+                l--; c++;
                 break;
-            case 3: executa_jogada(i, e, l, c+1);
+            case 3:
+                c++;
                 break;
-            case 4: executa_jogada(i, e, l+1, c+1);
+            case 4:
+                l++; c++;
                 break;
-            case 5: executa_jogada(i, e, l+1, c);
+            case 5:
+                l++;
                 break;
-            case 6: executa_jogada(i, e, l+1, c-1);
+            case 6:
+                l++; c--;
                 break;
-            case 7: executa_jogada(i, e, l, c-1);
+            case 7:
+                c--;
                 break;
         }
     }

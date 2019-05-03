@@ -49,6 +49,10 @@ void printa(ESTADO e)
     printf("Score jogador X: %d\n", e.score_x);
     printf("Score jogador O: %d\n", e.score_o);
 
-    if (e.peca == VALOR_O) printf("(O)\n");
-    else printf("(X)\n");
+    if (e.modo == '0' || (e.modo == '1' && e.peca != e.peca_bot)){
+        if (e.peca == VALOR_O) printf("(O)\n");
+        else printf("(X)\n");
+
+        printf("(?) Ajuda\n");
+    }
 }

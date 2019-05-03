@@ -29,6 +29,10 @@ int main() {
                 novo_jogo(opcao, &stack);
                 break;
             }
+            case '?': {
+                menuAjuda(1);
+                break;
+            }
         }
 
         printf("\nInsira o seu comando: ");

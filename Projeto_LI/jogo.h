@@ -18,7 +18,7 @@ void executa_jogada(int i, ESTADO *e, int l, int c);
 char verifica_fim_jogo(ESTADO e);
 int verifica_turno(ESTADO e);
 int conta_pontos(ESTADO e, char jogador);
-void menuAjuda ();
+void menuAjuda (int x);
 
 
 

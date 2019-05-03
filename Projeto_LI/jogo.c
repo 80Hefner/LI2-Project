@@ -75,7 +75,7 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
                     break;
                 }
                 case '?': {
-                    menuAjuda();
+                    menuAjuda(2);
                     break;
                 }
                 case 'E': {
@@ -141,7 +141,7 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
                         break;
                     }
                     case '?': {
-                        menuAjuda();
+                        menuAjuda(2);
                         break;
                     }
                     case 'E': {
@@ -421,9 +421,25 @@ int conta_pontos (ESTADO e, char jogador){
 }
 
 // Função que quando se pressione '?' aparece um menu de ajuda com todas as opções;
-void menuAjuda () {
-    printf("- Presse n ou N para comecar um novo Jogo!\n");
-    printf("- Presse j ou J para realizar uma jogada inserindo depois a linha e a coluna!\n");
-    printf("- Presse q ou Q para sair do Jogo!\n");
-    printf("- Presse ? a qualquer momento para ajuda!\n");
+// Recebe 1 para imprimir a ajuda do menu principal; 2 para imprimire a ajuda do menu de jogo
+void menuAjuda (int x) {
+
+    if (x == 1){
+        printf("N <peça>: para novo jogo em que o primeiro a jogar é o jogador com <peça>.\n");
+        printf("A <peça> <nível>: para novo jogo contra um bot em que o bot joga com <peça> num nível de dificuldade "
+               "<nível> (3 níveis possíveis). Neste modo quem joga primeiro é sempre o jogador com a peça X.\n");
+        printf("L <ficheiro>: para ler um jogo de <ficheiro>.\n");
+        printf("?: para abrir o menu de ajuda.\n");
+        printf("Q: para sair.\n");
+    }
+    else{
+        printf("J <L> <C>: para jogar peça atual na posição (L,C).\n");
+        printf("U: para desfazer a última jogada(Undo).\n");
+        printf("S: para imprimir um ponto ‘.’ nas posições com jogada válida.\n");
+        printf("H: para sugestão de jogada. Coloca um ‘?’ no sitio sugerido.\n");
+        printf("E <ficheiro>: para escrever o estado do jogo em <ficheiro>.\n");
+        printf("?: para abrir o menu de ajuda.\n");
+        printf("Q: para sair do jogo.\n");
+    }
+
 }

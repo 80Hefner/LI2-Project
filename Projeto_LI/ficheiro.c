@@ -130,11 +130,25 @@ void ler_jogo (char *opcao, NODE **stack)
             fseek(f, 1, SEEK_CUR);
         }
 
+        e.score_o = conta_pontos(e, 'O');
+        e.score_x = conta_pontos(e, 'X');
+
         // Fecha o ficheiro
         fclose(f);
 
+        // Atualiza a peça do bot, caso o jogo esteja em modo automático
+        if (e.modo == '1'){
+            if (e.peca == VALOR_X)
+                e.peca_bot = VALOR_O;
+            else
+                e.peca_bot = VALOR_X;
+        }
+
         // Começa um jogo, a partir da variável e
-        jogovsplayer(opcao, e, stack);
+        if (e.modo == '0')
+            jogovsplayer(opcao, e, stack);
+        else
+            jogovsbot(opcao, e, stack);
 
     }
 

@@ -23,6 +23,11 @@ int main() {
             }
             case 'L': {
                 ler_jogo(opcao, &stack);
+                break;
+            }
+            case 'A': {
+                novo_jogo(opcao, &stack);
+                break;
             }
         }
 

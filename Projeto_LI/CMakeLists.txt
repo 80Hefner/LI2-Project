@@ -3,4 +3,4 @@ project(proj C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(proj main.c estado.h estado.c jogo.c stack.c movimentoValidos.c ficheiro.c ficheiro.h)
+add_executable(proj main.c estado.h estado.c jogo.c stack.c movimentoValidos.c ficheiro.c bot.c)

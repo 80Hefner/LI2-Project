@@ -7,14 +7,12 @@
 #include "stack.h"
 #include "movimentoValidos.h"
 #include "ficheiro.h"
+#include "bot.h"
 
 //Função que cria uma variável do tipo ESTADO e prepara-a para um novo jogo
 void novo_jogo(char *opcao, NODE **stack)
 {
     ESTADO e = {0};
-
-    if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
-    else e.peca = VALOR_O;
 
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
@@ -26,18 +24,33 @@ void novo_jogo(char *opcao, NODE **stack)
     e.grelha[4][3] = VALOR_X;
     e.grelha[3][3] = VALOR_O;
     e.grelha[4][4] = VALOR_O;
-    e.modo = '0';
-
-    jogovsplayer(opcao, e, stack);
-}
-
-// Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial.
-// Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
-void jogovsplayer(char *opcao, ESTADO e, NODE **stack){
 
     e.score_x = conta_pontos(e, 'X');
     e.score_o = conta_pontos(e, 'O');
 
+    if (toupper(opcao[0]) == 'J'){
+        if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
+        else e.peca = VALOR_O;
+
+        e.modo = '0';
+        jogovsplayer(opcao, e, stack);
+    }
+    else{
+        if (toupper(opcao[2]) == 'X') e.peca_bot = VALOR_X;
+        else e.peca_bot = VALOR_O;
+
+        e.peca = VALOR_X;
+        e.modo = '1';
+        e.nivel = opcao[4];
+        jogovsbot(opcao, e, stack);
+    }
+
+}
+
+// Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial.
+// Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
+void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
+{
     push(e, stack);
     printa(e);
 
@@ -97,6 +110,75 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack){
     reinicia_stack(stack);
 }
 
+// Corre um jogo contra um bot
+void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
+{
+    push(e, stack);
+    printa(e);
+
+    while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
+
+        if (verifica_turno(e)) {
+
+            if (e.peca == e.peca_bot)
+                jogada_bot(&e, stack);
+            else{
+                printf("\nInsira o seu comando: ");
+                fgets(opcao, 50, stdin);
+
+                switch (toupper(opcao[0])) {
+                    case 'J': {
+                        jogada(&e, opcao[2], opcao[4], stack);
+                        break;
+                    }
+                    case 'U': {
+                        pop(&e, stack);
+                        printa(e);
+                        break;
+                    }
+                    case 'S' : {
+                        printa(calculaMovimentosValidos((e.peca), e));
+                        break;
+                    }
+                    case '?': {
+                        menuAjuda();
+                        break;
+                    }
+                    case 'E': {
+                        grava_jogo(opcao, e);
+                        break;
+                    }
+                    case 'H': {
+                        printa(hint(calculaMovimentosValidos((e.peca), e)));
+                        break;
+                    }
+                }
+            }
+
+        }
+        else {
+            if (e.peca == VALOR_X) e.peca = VALOR_O;
+            else e.peca = VALOR_X;
+
+            printf("O jogador não tem jogadas possíveis.\n");
+            printa(e);
+        }
+    }
+
+    if (verifica_fim_jogo(e) == 'X') {
+        opcao[0] = 'Q';
+        printf("\nO jogador X ganhou!!!");
+    }
+    else if (verifica_fim_jogo(e) == 'O') {
+        opcao[0] = 'Q';
+        printf("\nO jogador O ganhou!!!");
+    }
+    else printf("Jogo interrompido.\n");
+
+    reinicia_stack(stack);
+
+}
+
 
 // Recebe o estado do jogo e a posição onde se quer efetuar a jogada. Testa se a jogada é possível e executa-a
 void jogada(ESTADO *e, int l, int c, NODE **stack) {
@@ -113,7 +195,6 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
             }
         }
     }
-
 
     if (x) {
         if (e->peca == VALOR_X)
@@ -274,15 +355,18 @@ char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o 
 // Recebe o estado do jogo e verifica se o próximo jogador tem jogadas disponíveis
 int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas; 0 caso contrário
 
+    int x = 0;
+
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             for (int k = 0; k < 8; k++){
-                if (verifica_jogada(k, &e, i, j)) return 1;
+                if (verifica_jogada(k, &e, i, j))
+                    x = 1;
             }
         }
     }
 
-    return 0;
+    return x;
 }
 
 // Recebe o estado do jogo e o char correspondente a um jogador e conta o seu número de pontos

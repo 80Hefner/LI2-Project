@@ -74,6 +74,8 @@ ESTADO calculaMovimentosValidos (VALOR who, ESTADO e) {
     return e;
 }
 
+
+// Recebe um estado com as possibilidades de jogadas e escolhe, aleatoriamente, uma delas
 ESTADO hint (ESTADO e)
 {
     int x = 0;

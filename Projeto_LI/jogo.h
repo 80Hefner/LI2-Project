@@ -11,6 +11,7 @@
 
 void novo_jogo(char *opcao, NODE **stack);
 void jogovsplayer(char *opcao, ESTADO e, NODE **stack);
+void jogovsbot(char *opcao, ESTADO e, NODE ** stack);
 void jogada(ESTADO *e, int linha, int coluna, NODE **stack);
 int verifica_jogada(int i, ESTADO *e, int l, int c);
 void executa_jogada(int i, ESTADO *e, int l, int c);

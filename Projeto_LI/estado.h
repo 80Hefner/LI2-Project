@@ -30,6 +30,7 @@ typedef struct estado {
     char nivel; // nivel de dificuldade do bot
     int score_x; // score do jogador X
     int score_o; // score do jogador O
+    VALOR peca_bot; // peça do bot
 } ESTADO;
 
 void printa(ESTADO);

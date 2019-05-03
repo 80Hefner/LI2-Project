@@ -28,7 +28,7 @@ void novo_jogo(char *opcao, NODE **stack)
     e.score_x = conta_pontos(e, 'X');
     e.score_o = conta_pontos(e, 'O');
 
-    if (toupper(opcao[0]) == 'J'){
+    if (toupper(opcao[0]) == 'N'){
         if (toupper(opcao[2]) == 'X') e.peca = VALOR_X;
         else e.peca = VALOR_O;
 

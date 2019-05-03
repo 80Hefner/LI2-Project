@@ -11,8 +11,11 @@ void printa(ESTADO e)
     char c = ' ';
 
     printf("\n");
+    printf("  1 2 3 4 5 6 7 8\n");
 
     for (int i = 0; i < 8; i++) {
+        printf("%d ", i+1);
+
         for (int j = 0; j < 8; j++) {
             switch (e.grelha[i][j]) {
                 case VALOR_O: {

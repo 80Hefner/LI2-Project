@@ -24,17 +24,17 @@ void grava_jogo (char *opcao, ESTADO e)
     //Neste momento temos o ficheiro aberto na variável f, vamos começar a escrever nele
 
     if (e.modo == '0')
-        fprintf(f, "M ");
+        fprintf(f, "M");
     else
-        fprintf(f, "A ");
+        fprintf(f, "A");
 
     if (e.peca == VALOR_X)
-        fprintf(f, "X ");
+        fprintf(f, " X");
     else
-        fprintf(f, "O ");
+        fprintf(f, " O");
 
     if (e.modo == '1')
-        fprintf(f, "%c ", e.nivel);
+        fprintf(f, " %c", e.nivel);
 
     fprintf(f, "\n");
 
@@ -92,7 +92,6 @@ void ler_jogo (char *opcao, NODE **stack)
 
         // Atualiza a peca do próximo jogador a jogar da variável e, conforme o ficheiro
         fscanf(f, "%c", aux);
-        fseek(f, 1, SEEK_CUR);
 
         if (aux[0] == 'X')
             e.peca = VALOR_X;
@@ -101,8 +100,8 @@ void ler_jogo (char *opcao, NODE **stack)
 
         // Atualiza o nível do bot, caso esteja em modo automático
         if (e.modo == '1'){
-            fscanf(f, "%c", aux);
             fseek(f, 1, SEEK_CUR);
+            fscanf(f, "%c", aux);
 
             if (aux[0] == '1')
                 e.nivel = '1';

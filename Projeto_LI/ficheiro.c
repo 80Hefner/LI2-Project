@@ -67,11 +67,13 @@ void ler_jogo (char *opcao, NODE **stack)
     FILE *f;
     char aux [50];
     ESTADO e = {0};
+    int a;
 
     // Atribui o nome do ficheiro à variável aux
-    for (int i = 2; opcao[i] != '\0' ; i++){
-        aux[i-2] = opcao[i];
+    for (a = 2; opcao[a] != '\0' ; a++){
+        aux[a-2] = opcao[a];
     }
+    aux[a-3] = '\0';
 
     // Abre o ficheiro
     f = fopen(aux, "r");

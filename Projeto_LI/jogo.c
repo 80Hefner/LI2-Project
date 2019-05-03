@@ -67,6 +67,11 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack){
                 }
                 case 'E': {
                     grava_jogo(opcao, e);
+                    break;
+                }
+                case 'H': {
+                    printa(hint(calculaMovimentosValidos((e.peca), e)));
+                    break;
                 }
             }
         }

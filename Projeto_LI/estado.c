@@ -31,6 +31,10 @@ void printa(ESTADO e)
                     c = '.';
                     break;
                 }
+                case HINT: {
+                    c = '?';
+                    break;
+                }
             }
             printf("%c ", c);
 

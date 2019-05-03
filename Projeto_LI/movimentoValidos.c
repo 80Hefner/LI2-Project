@@ -6,7 +6,8 @@
 #include "jogo.h"
 #include "estado.h"
 #include "stack.h"
-
+#include <time.h>
+#include <stdlib.h>
 
 
 // Função auxiliar da função seguinte, que é introduzida da mesma maneira!
@@ -70,5 +71,36 @@ ESTADO calculaMovimentosValidos (VALOR who, ESTADO e) {
             }
         }
     }
+    return e;
+}
+
+ESTADO hint (ESTADO e)
+{
+    int x = 0;
+    time_t t;
+
+    for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if (e.grelha[i][j] == SUG) x++;
+        }
+    }
+
+    srand((unsigned) time(&t));
+
+    x = rand() % x;
+
+    for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if (e.grelha[i][j] == SUG && x){
+                e.grelha[i][j] = VAZIA;
+                x--;
+            }
+            else if (e.grelha[i][j] == SUG){
+                e.grelha[i][j] = HINT;
+                x = -1;
+            }
+        }
+    }
+
     return e;
 }

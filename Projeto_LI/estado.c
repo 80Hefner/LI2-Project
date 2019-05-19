@@ -53,6 +53,6 @@ void printa(ESTADO e)
         if (e.peca == VALOR_O) printf("(O)\n");
         else printf("(X)\n");
 
-        printf("(?) Ajuda\n");
+        printf("(?) Ajuda");
     }
 }

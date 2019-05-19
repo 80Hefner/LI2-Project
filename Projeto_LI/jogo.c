@@ -57,7 +57,7 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
     while (toupper(opcao[0]) != 'Q' && !verifica_fim_jogo(e)) {
 
         if (verifica_turno(e)) {
-            printf("\nInsira o seu comando: ");
+            printf("\n\nInsira o seu comando: ");
             fgets(opcao, 50, stdin);
 
             switch (toupper(opcao[0])) {
@@ -123,7 +123,7 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
             if (e.peca == e.peca_bot)
                 jogada_bot(&e, stack);
             else{
-                printf("\nInsira o seu comando: ");
+                printf("\n\nInsira o seu comando: ");
                 fgets(opcao, 50, stdin);
 
                 switch (toupper(opcao[0])) {

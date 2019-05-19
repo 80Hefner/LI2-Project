@@ -71,7 +71,7 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
                     break;
                 }
                 case 'S' : {
-                    printa(calculaMovimentosValidos ((e.peca) , e));
+                    printa(calculaMovimentosValidos (e));
                     break;
                 }
                 case '?': {
@@ -83,7 +83,7 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
                     break;
                 }
                 case 'H': {
-                    printa(hint(calculaMovimentosValidos((e.peca), e)));
+                    printa(hint(calculaMovimentosValidos(e)));
                     break;
                 }
             }
@@ -137,7 +137,7 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
                         break;
                     }
                     case 'S' : {
-                        printa(calculaMovimentosValidos((e.peca), e));
+                        printa(calculaMovimentosValidos(e));
                         break;
                     }
                     case '?': {
@@ -149,7 +149,7 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
                         break;
                     }
                     case 'H': {
-                        printa(hint(calculaMovimentosValidos((e.peca), e)));
+                        printa(hint(calculaMovimentosValidos(e)));
                         break;
                     }
                 }

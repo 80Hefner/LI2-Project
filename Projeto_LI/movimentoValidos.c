@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 
+/*
 // Função auxiliar da função seguinte, que é introduzida da mesma maneira!
 int verifica_Movimento (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
 
@@ -23,7 +24,6 @@ int verifica_Movimento (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
 }
 
 
-/*
 // Função que vê numa direção se movimento é valido
 int movimento_valido (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
     VALOR adversario;
@@ -42,7 +42,7 @@ int movimento_valido (VALOR who, int vl, int vc, int l, int c, ESTADO *e) {
 
 
 // Função que vai returnar um estado com as posições que possam ser sugeridas para movimentos validos
-ESTADO calculaMovimentosValidos (VALOR who, ESTADO e) {
+ESTADO calculaMovimentosValidos (ESTADO e) {
 
     for (int l = 0; l < 8; l++) {
         for (int c = 0; c < 8; c++) {

@@ -92,7 +92,7 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
             if (e.peca == VALOR_X) e.peca = VALOR_O;
             else e.peca = VALOR_X;
 
-            printf("O jogador não tem jogadas possíveis.\n");
+            printf("\nO jogador não tem jogadas possíveis.\n");
             printa(e);
         }
     }
@@ -160,7 +160,7 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
             if (e.peca == VALOR_X) e.peca = VALOR_O;
             else e.peca = VALOR_X;
 
-            printf("O jogador não tem jogadas possíveis.\n");
+            printf("\nO jogador não tem jogadas possíveis.\n");
             printa(e);
         }
     }
@@ -204,7 +204,7 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
         push(*e, stack);
         printa(*e);
     }
-    else printf("\nJogada inválida!\n");
+    else printf("\nJogada inválida!");
 
 }
 

@@ -6,6 +6,10 @@
 
 
 // exemplo de uma função para imprimir o estado (Tabuleiro)
+/**
+ * Função responsável por imprimir taubleiro para um Estado de jogo dado.
+ * @param e - Estado atual do jogo
+ */
 void printa(ESTADO e)
 {
     char c = ' ';

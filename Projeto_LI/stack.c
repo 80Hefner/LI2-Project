@@ -6,7 +6,12 @@
 #include <stdio.h>
 #include "stack.h"
 
-//Inserir elementos no inicio
+
+/**
+ * Insere Estado no início da Stack
+ * @param e - Estado de Jogo Atual
+ * @param stack - Stack que contém todos os Estados de Jogo anteriores
+ */
 void push(ESTADO e, NODE **stack)
 {
     //criar um novo nodo temp e alocar memoria
@@ -29,7 +34,12 @@ void push(ESTADO e, NODE **stack)
 }
 
 
-//Remover o elemento no topo da stack
+
+/**
+ *
+ * @param e - Estado de Jogo Atual
+ * @param stack - Stack que contém todos os Estados de Jogo anteriores
+ */
 void pop(ESTADO *e, NODE **stack)
 {
     NODE* temp;
@@ -53,7 +63,10 @@ void pop(ESTADO *e, NODE **stack)
 }
 
 
-//Limpa a stack após o fim de um jogo
+/**
+ * Vai limpar a Stack após o fim de um jogo.
+ * @param stack - Stack que contém todos os Estados de Jogo anteriores
+ */
 void reinicia_stack(NODE **stack)
 {
     NODE* temp;

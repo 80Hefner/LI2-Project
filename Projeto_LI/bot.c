@@ -18,7 +18,7 @@ void jogada_bot(ESTADO *e, NODE **stack)
             break;
         }
         case '2': {
-            int x;
+            /*int x;
             time_t t;
             srand((unsigned) time(&t));
 
@@ -27,7 +27,8 @@ void jogada_bot(ESTADO *e, NODE **stack)
             if (x % 2)
                 bot_nivel1(e, stack);
             else
-                bot_nivel3(e, stack);
+                bot_nivel3(e, stack);*/
+            bot_nivel2(e, stack);
             break;
         }
         case '3':{
@@ -57,6 +58,28 @@ void bot_nivel1(ESTADO *e, NODE **stack)
 
 }
 
+
+void bot_nivel2(ESTADO *e, NODE **stack)
+{
+    BOT decisao = {0};
+
+    decisao.estado = *e;
+    decisao.anterior = NULL;
+
+    completa_arvore(&decisao, *e, 0);
+
+    int l, c;
+
+    encontra_melhor_jogada(&decisao, 1, &l, &c);
+
+    printf("\nO bot jogou na posição (%d,%d)\n", l+1, c+1);
+
+    jogada(e, l+49, c+49, stack);
+
+    for (int i = 0; decisao.jogadas[i] != NULL; i++)
+        liberta_memoria_arvore(decisao.jogadas[i], i);
+
+}
 
 
 void bot_nivel3(ESTADO *e, NODE **stack)

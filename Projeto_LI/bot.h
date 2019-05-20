@@ -19,6 +19,7 @@ typedef struct bot {
 
 void jogada_bot(ESTADO *e, NODE **stack);
 void bot_nivel1(ESTADO *e, NODE **stack);
+void bot_nivel2(ESTADO *e, NODE **stack);
 void bot_nivel3(ESTADO *e, NODE **stack);
 int contapontos_bot(ESTADO e);
 void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int profundidade);

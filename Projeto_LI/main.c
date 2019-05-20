@@ -4,7 +4,10 @@
 #include "movimentoValidos.h"
 #include "ficheiro.h"
 
-
+/**
+ * Função principal que faz com que o jogo possa aconteçer! Permite-nos escolher as opções do Menú Inicial para começar um novo jogo, etc.
+ * @return
+ */
 int main() {
     //ESTADO e = {0};
     char opcao[50];

@@ -9,7 +9,12 @@
 #include "ficheiro.h"
 #include "bot.h"
 
-//Função que cria uma variável do tipo ESTADO e prepara-a para um novo jogo
+
+/**
+ * Função que cria uma variável do tipo ESTADO e prepara-a para um novo jogo
+ * @param opcao - Opção recebida no interpertdor que contém o tipo de jogo que quer (BOT ou Vs.Player) e o jogador que pretende ser
+ * @param stack - Stack que contém todos os Estados de Jogo
+ */
 void novo_jogo(char *opcao, NODE **stack)
 {
     ESTADO e = {0};
@@ -47,8 +52,14 @@ void novo_jogo(char *opcao, NODE **stack)
 
 }
 
-// Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial.
-// Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio
+
+
+/**
+ * Corre um jogo entre 2 jogadores. Quando a função é chamada o jogo não tem necessariamente de estar no seu estado inicial. Isto permite correr um jogo a partir de um ficheiro, com o jogo já a meio.
+ * @param opcao - Opção recebida no interpertdor que contem o tipo de comando que quer realizar
+ * @param e - Estado atual de Jogo
+ * @param stack - Stack que contém todos os Estados de Jogo
+ */
 void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
 {
     push(e, stack);
@@ -110,7 +121,14 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
     reinicia_stack(stack);
 }
 
-// Corre um jogo contra um bot
+
+
+/**
+ *  Corre um jogo contra um bot
+ * @param opcao - Opção recebida no interpertdor que contem o tipo de comando que quer realizar
+ * @param e - Estado atual de Jogo
+ * @param stack - Stack que contém todos os Estados de Jogo
+ */
 void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
 {
     push(e, stack);
@@ -180,7 +198,14 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
 }
 
 
-// Recebe o estado do jogo e a posição onde se quer efetuar a jogada. Testa se a jogada é possível e executa-a
+
+/**
+ * Recebe o estado do jogo e a posição onde se quer efetuar a jogada. Testa se a jogada é possível e executa-a
+ * @param e - Estado atual de Jogo
+ * @param l - Linha
+ * @param c - Coluna
+ * @param stack - Stack que contém todos os Estados de Jogo
+ */
 void jogada(ESTADO *e, int l, int c, NODE **stack) {
     l -= 49;  //subtrai-se 48 do código ASCII e 1 pois a posição (1,1) corresponde à posição (0,0) da grelha
     c -= 49;
@@ -208,9 +233,16 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
 
 }
 
-// Recebe um indicador i (0 se verificar a jogador para a esquerda/cima; 1 para cima; 2 para a direita/cima;
-// 3 para a direita; 4 para a direita/baixo; 5 para baixo; 6 para a esquerda/baixo; 7 para a esquerda), o estado do jogo
-// e a posição para a qual quer verificar a jogada
+
+
+/**
+ * Recebe um indicador i (0 se verificar a jogador para a esquerda/cima; 1 para cima; 2 para a direita/cima; 3 para a direita; 4 para a direita/baixo; 5 para baixo; 6 para a esquerda/baixo; 7 para a esquerda)
+ * @param i - Indicador
+ * @param e - Estado atual de Jogo
+ * @param l - Linha em que pertende Jogar
+ * @param c - Coluna em que pertende jogar
+ * @return 1 se a jogada for possível
+ */
 int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada for possível
     int x = 0;
     VALOR peca = e->peca;
@@ -323,7 +355,16 @@ int verifica_jogada(int i, ESTADO *e, int l, int c){ // retorna 1 se a jogada fo
     return (x == 1);
 }
 
-// Recebe o indicador da jogada, o estado do jogo e uma posição e executa uma jogada
+
+
+
+/**
+ *
+ * @param i - Indicador da Jogada
+ * @param e - Estado Atual do Jogo
+ * @param l - Linha em que pretende executar jogada
+ * @param c - Coluna em que pretende executar jogada
+ */
 void executa_jogada(int i, ESTADO *e, int l, int c) {
 
     VALOR peca = e->peca;
@@ -362,7 +403,13 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
 }
 
 
-// Recebe o estado do jogo e verifica se este terminou
+
+
+/**
+ * verifica se jogo já terminou.
+ * @param e - Estado atual do Jogo
+ * @return 0 se o jogo não acabou, 'X' se o jogador X ganhou e 'O' se o jogador O ganhou.
+ */
 char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o jogador X ganhou; 'O' se o jogador O ganhou.
     char x = 1;
     ESTADO e2 = e;
@@ -384,7 +431,13 @@ char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o 
     return x;
 }
 
-// Recebe o estado do jogo e verifica se o próximo jogador tem jogadas disponíveis
+
+
+/**
+ *
+ * @param e - Estado atual do Jogo
+ * @return 1 se o jogador pode efetuar jogadas e 0 caso contrário
+ */
 int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas; 0 caso contrário
 
     int x = 0;
@@ -401,7 +454,14 @@ int verifica_turno(ESTADO e){ // retorna 1 se o jogador pode efetuar jogadas; 0 
     return x;
 }
 
-// Recebe o estado do jogo e o char correspondente a um jogador e conta o seu número de pontos
+
+
+/**
+ *
+ * @param e - Estado atual do Jogo
+ * @param jogador - Jogador
+ * @return Número de pontos do Jogador dado
+ */
 int conta_pontos (ESTADO e, char jogador){
     int conta = 0;
 
@@ -420,8 +480,12 @@ int conta_pontos (ESTADO e, char jogador){
     return conta;
 }
 
-// Função que quando se pressione '?' aparece um menu de ajuda com todas as opções;
-// Recebe 1 para imprimir a ajuda do menu principal; 2 para imprimire a ajuda do menu de jogo
+
+
+/**
+ * Função que quando se pressione '?' aparece um menu de ajuda com todas as opções: Quando x é 1 imprime a ajuda do menu principal e quando x é 2 imprime a ajuda do menu de jogo.
+ * @param x - Tipo de ajuda que vai fornecer
+ */
 void menuAjuda (int x) {
 
     if (x == 1){

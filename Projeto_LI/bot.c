@@ -18,16 +18,6 @@ void jogada_bot(ESTADO *e, NODE **stack)
             break;
         }
         case '2': {
-            /*int x;
-            time_t t;
-            srand((unsigned) time(&t));
-
-            x = rand();
-
-            if (x % 2)
-                bot_nivel1(e, stack);
-            else
-                bot_nivel3(e, stack);*/
             bot_nivel2(e, stack);
             break;
         }
@@ -62,15 +52,15 @@ void bot_nivel1(ESTADO *e, NODE **stack)
 void bot_nivel2(ESTADO *e, NODE **stack)
 {
     BOT decisao = {0};
+    int l, c;
 
     decisao.estado = *e;
     decisao.anterior = NULL;
+    decisao.valor = -10000;
 
-    completa_arvore(&decisao, *e, 0);
+    completa_arvore(&decisao, *e, 1, 1);
 
-    int l, c;
-
-    encontra_melhor_jogada(&decisao, 1, &l, &c);
+    encontra_melhor_jogada(&decisao, &l, &c);
 
     printf("\nO bot jogou na posição (%d,%d)\n", l+1, c+1);
 
@@ -85,15 +75,15 @@ void bot_nivel2(ESTADO *e, NODE **stack)
 void bot_nivel3(ESTADO *e, NODE **stack)
 {
     BOT decisao = {0};
+    int l, c;
 
     decisao.estado = *e;
     decisao.anterior = NULL;
+    decisao.valor = -10000;
 
-    completa_arvore(&decisao, *e, 2);
+    completa_arvore(&decisao, *e, 6, 1);
 
-    int l, c;
-
-    encontra_melhor_jogada(&decisao, 3, &l, &c);
+    encontra_melhor_jogada(&decisao, &l, &c);
 
     printf("\nO bot jogou na posição (%d,%d)\n", l+1, c+1);
 
@@ -102,10 +92,12 @@ void bot_nivel3(ESTADO *e, NODE **stack)
     for (int i = 0; decisao.jogadas[i] != NULL; i++)
         liberta_memoria_arvore(decisao.jogadas[i], i);
 
-
 }
 
-void completa_arvore(BOT *anterior, ESTADO e, int profundidade)
+
+
+// Cria uma árvore com as jogadas possíveis, de profundidade: fundo
+void completa_arvore(BOT *anterior, ESTADO e, int fundo, int depth)
 {
     int i = 0;
 
@@ -114,7 +106,7 @@ void completa_arvore(BOT *anterior, ESTADO e, int profundidade)
             for (int k = 0, y = 1; k < 8 && y; k++){
 
                 if (verifica_jogada(k, &e, l, c)){
-                    insere_nodo(anterior, i, e, l, c, profundidade);
+                    insere_nodo(anterior, i, e, l, c, depth);
                     i++;
                     y = 0;
                 }
@@ -122,24 +114,27 @@ void completa_arvore(BOT *anterior, ESTADO e, int profundidade)
         }
     }
 
-    if (profundidade) {
+    if (depth < fundo) {
 
         for (int k = 0; anterior->jogadas[k] != NULL; k++) {
-            completa_arvore(anterior->jogadas[k], anterior->jogadas[k]->estado, profundidade - 1);
+            completa_arvore(anterior->jogadas[k], anterior->jogadas[k]->estado, fundo, depth + 1);
         }
     }
 }
 
-void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int profundidade)
+
+
+// Insere um único nodo, de acordo com a sua profundidade
+void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int depth)
 {
     BOT *nodo = (BOT *) malloc(sizeof(BOT));
 
-    for (int k = 0; k < 20; nodo->jogadas[k] = NULL, k++);
+    for (int k = 0; k < 40; nodo->jogadas[k] = NULL, k++);
 
-    if (profundidade == 2)
-        nodo->valor = 10000;
-    else
+    if (depth % 2 == 0)
         nodo->valor = -10000;
+    else
+        nodo->valor = 10000;
 
     nodo->linha = l;
     nodo->coluna = c;
@@ -151,7 +146,7 @@ void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int profundidade)
             executa_jogada(k, &e, l, c);
     }
 
-    if (profundidade == 1)
+    if (anterior->estado.peca == VALOR_O)
         e.peca = VALOR_X;
     else
         e.peca = VALOR_O;
@@ -160,17 +155,17 @@ void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int profundidade)
 }
 
 
-void encontra_melhor_jogada(BOT *nodo, int profundidade, int *linha_final, int *coluna_final)
+// Percorre a árvore com as jogadas e escolhe a mais adequada
+void encontra_melhor_jogada(BOT *nodo, int *linha_final, int *coluna_final)
 {
-
-    int x;
+    int depth = 0;
 
     for (int i = 0; nodo->jogadas[i] != NULL; i++){
 
-        x = calcula_valor_nodo(nodo->jogadas[i], profundidade-1);
+        calcula_valor_nodo(nodo->jogadas[i], depth + 1);
 
-        if (x > nodo->valor){
-            nodo->valor = x;
+        if (nodo->jogadas[i]->valor > nodo->valor){
+            nodo->valor = nodo->jogadas[i]->valor;
             *linha_final = nodo->jogadas[i]->linha;
             *coluna_final = nodo->jogadas[i]->coluna;
         }
@@ -178,114 +173,81 @@ void encontra_melhor_jogada(BOT *nodo, int profundidade, int *linha_final, int *
 }
 
 
-int calcula_valor_nodo(BOT *nodo, int profundidade)
+// Função auxiliar da encontra_melhor_jogada, que percorre o resto da árvore
+void calcula_valor_nodo(BOT *nodo, int depth)
 {
-
-    int x;
 
     if (nodo->jogadas[0] != NULL){
 
         for (int i = 0; nodo->jogadas[i] != NULL; i++){
-            x = calcula_valor_nodo(nodo->jogadas[i], profundidade-1);
 
-            if (profundidade == 2) {
-                if (x < nodo->valor) nodo->valor = x;
+            calcula_valor_nodo(nodo->jogadas[i], depth + 1);
+
+            if (depth % 2 == 0) {
+                if (nodo->jogadas[i]->valor > nodo->valor) nodo->valor = nodo->jogadas[i]->valor;
             }
-            else if (profundidade == 1) {
-                if (x > nodo->valor) nodo->valor = x;
+            else {
+                if (nodo->jogadas[i]->valor < nodo->valor) nodo->valor = nodo->jogadas[i]->valor;
             }
         }
-        x = nodo->valor;
+
     }
     else {
-        x = contapontos_bot(nodo->estado);
+        nodo->valor = contapontos_bot(nodo->estado);
     }
 
-    return x;
 }
 
 
+// Conta os pontos do jogador de acordo com uma pontução diferente
 int contapontos_bot(ESTADO e)
 {
     int x = 0;
-    VALOR peca = e.peca;
+    VALOR peca, peca_adversario;
+
+    peca_adversario = e.peca;
+
+    if (e.peca == VALOR_O)
+        peca = VALOR_X;
+    else
+        peca = VALOR_O;
 
     /*
-    Sistema de pontuação usado
+    VALOR pontuacao[8][8] = {{10, -5,  3,  3,  3,  3, -5, 10},
+                             {-5, -5, -3, -3, -3, -3, -5, -5},
+                             { 3, -3,  1,  1,  1,  1, -3,  3},
+                             { 3, -3,  1,  1,  1,  1, -3,  3},
+                             { 3, -3,  1,  1,  1,  1, -3,  3},
+                             { 3, -3,  1,  1,  1,  1, -3,  3},
+                             {-5, -5, -3, -3, -3, -3, -5, -5},
+                             {10, -5,  3,  3,  3,  3, -5, 10}};
+*/
 
-    10 -5  3  3  3  3 -5 10
-    -5 -5 -3 -3 -3 -3 -5 -5
-     3 -3  1  1  1  1 -3  3
-     3 -3  1  1  1  1 -3  3
-     3 -3  1  1  1  1 -3  3
-     3 -3  1  1  1  1 -3  3
-    -5 -5 -3 -3 -3 -3 -5 -5
-    10 -5  3  3  3  3 -5 10
-    */
+    VALOR pontuacao[8][8] = {{25, -5, 14, 10, 10, 14, -5, 25},
+                             {-5, -7, -4, -3, -3, -4, -7, -5},
+                             {14, -4,  3,  2,  2,  3, -4, 14},
+                             {10, -3,  2,  1,  1,  2, -3, 10},
+                             {10, -3,  2,  1,  1,  2, -3, 10},
+                             {14, -4,  3,  2,  2,  3, -4, 14},
+                             {-5, -7, -4, -3, -3, -4, -7, -5},
+                             {25, -5, 14, 10, 10, 14, -5, 25}};
 
-    if (e.grelha[0][0] == peca) x += 10;
-    if (e.grelha[0][7] == peca) x += 10;
-    if (e.grelha[7][0] == peca) x += 10;
-    if (e.grelha[7][7] == peca) x += 10;
-
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[0][i] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[7][i] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[i][0] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[i][7] == peca) x += 3;
-    }
-
-
-    if (e.grelha[0][1] == peca) x -= 5;
-    if (e.grelha[0][6] == peca) x -= 5;
-    if (e.grelha[1][0] == peca) x -= 5;
-    if (e.grelha[1][1] == peca) x -= 5;
-    if (e.grelha[1][6] == peca) x -= 5;
-    if (e.grelha[1][7] == peca) x -= 5;
-    if (e.grelha[6][0] == peca) x -= 5;
-    if (e.grelha[6][1] == peca) x -= 5;
-    if (e.grelha[6][6] == peca) x -= 5;
-    if (e.grelha[6][7] == peca) x -= 5;
-    if (e.grelha[7][1] == peca) x -= 5;
-    if (e.grelha[7][6] == peca) x -= 5;
-
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[1][i] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[6][i] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[i][1] == peca) x += 3;
-    }
-
-    for (int i = 2; i < 6; i++){
-        if (e.grelha[i][6] == peca) x += 3;
-    }
-
-
-    for (int i = 2; i < 6; i++){
-        for (int j = 2; j < 6; j++){
-            if (e.grelha[i][j] == peca) x++;
+    for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if (e.grelha[i][j] == peca) {
+                x += pontuacao[i][j];
+                x++;
+            }
+            else if (e.grelha[i][j] == peca_adversario){
+                x--;
+            }
         }
     }
 
     return x;
 
 }
+
 
 
 void liberta_memoria_arvore(BOT *nodo, int indice)

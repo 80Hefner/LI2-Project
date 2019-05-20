@@ -8,7 +8,11 @@
 #include "jogo.h"
 #include <stdio.h>
 
-
+/**
+ *
+ * @param opcao - opção recebida no interpertdor que contém o nome do ficheiro que pretende gravar.
+ * @param e - Estado de jogo atual.
+ */
 void grava_jogo (char *opcao, ESTADO e)
 {
     FILE *f;
@@ -62,6 +66,12 @@ void grava_jogo (char *opcao, ESTADO e)
 
 }
 
+
+/**
+ *
+ * @param opcao - opção recebida no interpertdor que contém o nome do ficheiro que pretende gravar.
+ * @param stack - Stack que contém todos os Estados de Jogo
+ */
 void ler_jogo (char *opcao, NODE **stack)
 {
     FILE *f;

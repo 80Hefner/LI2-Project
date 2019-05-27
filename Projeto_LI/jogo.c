@@ -116,6 +116,10 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!\n");
     }
+    else if (verifica_fim_jogo(e) == 'E') {
+        opcao[0] = 'Q';
+        printf("\nEmpate!!!\n");
+    }
     else printf("Jogo interrompido.\n");
 
     reinicia_stack(stack);
@@ -191,6 +195,10 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!\n");
     }
+    else if (verifica_fim_jogo(e) == 'E') {
+        opcao[0] = 'Q';
+        printf("\nEmpate!!!\n");
+    }
     else printf("Jogo interrompido.\n");
 
     reinicia_stack(stack);
@@ -219,6 +227,8 @@ void jogada(ESTADO *e, int l, int c, NODE **stack) {
     }
 
     if (x) {
+        e->grelha[l][c] = e->peca;
+
         if (e->peca == VALOR_X)
             e->peca = VALOR_O;
         else
@@ -369,6 +379,33 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
 
     VALOR peca = e->peca;
 
+    switch (i) {
+        case 0:
+            l--; c--;
+            break;
+        case 1:
+            l--;
+            break;
+        case 2:
+            l--; c++;
+            break;
+        case 3:
+            c++;
+            break;
+        case 4:
+            l++; c++;
+            break;
+        case 5:
+            l++;
+            break;
+        case 6:
+            l++; c--;
+            break;
+        case 7:
+            c--;
+            break;
+    }
+
     while (e->grelha[l][c] != peca) {
 
         e->grelha[l][c] = peca;
@@ -399,6 +436,7 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
                 c--;
                 break;
         }
+
     }
 }
 
@@ -410,7 +448,7 @@ void executa_jogada(int i, ESTADO *e, int l, int c) {
  * @param e - Estado atual do Jogo
  * @return 0 se o jogo não acabou, 'X' se o jogador X ganhou e 'O' se o jogador O ganhou.
  */
-char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o jogador X ganhou; 'O' se o jogador O ganhou.
+char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o jogador X ganhou; 'O' se o jogador O ganhou, 'E' em caso de empate.
     char x = 1;
     ESTADO e2 = e;
 
@@ -425,7 +463,8 @@ char verifica_fim_jogo(ESTADO e){ // retorna: 0 se o jogo não acabou; 'X' se o 
 
     if (!verifica_turno(e) && !verifica_turno(e2)){
         if (conta_pontos(e, 'X') > conta_pontos(e, 'O')) x = 'X';
-        else x = 'O';
+        else if (conta_pontos(e, 'X') < conta_pontos(e, 'O')) x = 'O';
+        else x = 'E';
     }
 
     return x;

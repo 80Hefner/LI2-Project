@@ -9,6 +9,11 @@
 #include <time.h>
 
 // Recebe o estado do jogo e decide uma jogada autonomamente
+/**
+ * Função responsável por escolher qual dos bots chamar.
+ * @param e - Apontador para o estado atual do jogo
+ * @param stack - Apontador para a stack
+ */
 void jogada_bot(ESTADO *e, NODE **stack)
 {
 
@@ -30,7 +35,11 @@ void jogada_bot(ESTADO *e, NODE **stack)
 }
 
 
-
+/**
+ * Função responsável por executar o bot de nível 1.
+ * @param e - Apontador para o estado atual do jogo
+ * @param stack - Apontador para a stack
+ */
 void bot_nivel1(ESTADO *e, NODE **stack)
 {
     ESTADO e_aux;
@@ -48,7 +57,11 @@ void bot_nivel1(ESTADO *e, NODE **stack)
 
 }
 
-
+/**
+ * Função responsável por executar o bot de nível 1.
+ * @param e - Apontador para o estado atual do jogo
+ * @param stack - Apontador para a stack
+ */
 void bot_nivel2(ESTADO *e, NODE **stack)
 {
     BOT decisao = {0};
@@ -72,6 +85,11 @@ void bot_nivel2(ESTADO *e, NODE **stack)
 }
 
 
+/**
+ * Função responsável por executar o bot de nível 1.
+ * @param e - Apontador para o estado atual do jogo
+ * @param stack - Apontador para a stack
+ */
 void bot_nivel3(ESTADO *e, NODE **stack)
 {
     BOT decisao = {0};
@@ -97,6 +115,13 @@ void bot_nivel3(ESTADO *e, NODE **stack)
 
 
 // Cria uma árvore com as jogadas possíveis, de profundidade: fundo
+/**
+ * Função que cria uma árvore com as jogadas possíveis, de profundidade: fundo
+ * @param anterior - Apontador para o nodo anterior
+ * @param e - Estado atual do jogo
+ * @param fundo - Profundidade total da árvore
+ * @param depth - Profundidade atual na árvore
+ */
 void completa_arvore(BOT *anterior, ESTADO e, int fundo, int depth)
 {
     int i = 0;
@@ -125,6 +150,15 @@ void completa_arvore(BOT *anterior, ESTADO e, int fundo, int depth)
 
 
 // Insere um único nodo, de acordo com a sua profundidade
+/**
+ * Função que insere um único nodo, de acordo com a sua profundidade
+ * @param anterior - Apontador para o nodo anterior
+ * @param i - Posição do array do nodo anterior onde será inserido o novo nodo
+ * @param e - Estado atual do jogo
+ * @param l - Linha da jogada a inserir
+ * @param c - Coluna da jogada a inserir
+ * @param depth - Profundidade atual na árvore
+ */
 void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int depth)
 {
     BOT *nodo = (BOT *) malloc(sizeof(BOT));
@@ -156,6 +190,12 @@ void insere_nodo(BOT *anterior, int i, ESTADO e, int l, int c, int depth)
 
 
 // Percorre a árvore com as jogadas e escolhe a mais adequada
+/**
+ * Função que percorre a árvore com as jogadas e escolhe a mais adequada
+ * @param nodo - Apontador para o nodo principal da árvore
+ * @param linha_final - Apontador para a linha da jogada escolhida
+ * @param coluna_final - Apontador para a coluna da jogada escolhida
+ */
 void encontra_melhor_jogada(BOT *nodo, int *linha_final, int *coluna_final)
 {
     int depth = 0;
@@ -174,6 +214,11 @@ void encontra_melhor_jogada(BOT *nodo, int *linha_final, int *coluna_final)
 
 
 // Função auxiliar da encontra_melhor_jogada, que percorre o resto da árvore
+/**
+ * Função auxiliar da encontra_melhor_jogada, que percorre o resto da árvore
+ * @param nodo - Apontador para o nodo anterior da árvore
+ * @param depth - Profundidade atual na árvore
+ */
 void calcula_valor_nodo(BOT *nodo, int depth)
 {
 
@@ -200,6 +245,10 @@ void calcula_valor_nodo(BOT *nodo, int depth)
 
 
 // Conta os pontos do jogador de acordo com uma pontução diferente
+/**
+ * Função que conta os pontos do jogador, de acordo com uma pontuação diferente
+ * @param e - Estado do jogo no nodo em análise
+ */
 int contapontos_bot(ESTADO e)
 {
     int x = 0;
@@ -249,7 +298,12 @@ int contapontos_bot(ESTADO e)
 }
 
 
-
+// Percorre a árvore criada e liberta os nodos da memória
+/**
+ * Função que percorre a árvore criada e liberta os nodos da memória
+ * @param nodo - Apontador para o nodo atual da árvore
+ * @param indice - Indice do nodo atual, no array do nodo anterior
+ */
 void liberta_memoria_arvore(BOT *nodo, int indice)
 {
     if (nodo != NULL) {

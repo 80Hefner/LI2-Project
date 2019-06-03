@@ -3,6 +3,7 @@
 #include "stack.h"
 #include "movimentoValidos.h"
 #include "ficheiro.h"
+#include "campeonato.h"
 
 /**
  * Função principal que faz com que o jogo possa aconteçer! Permite-nos escolher as opções do Menú Inicial para começar um novo jogo, etc.
@@ -34,6 +35,10 @@ int main() {
             }
             case '?': {
                 menuAjuda(1);
+                break;
+            }
+            case 'C': {
+                campeonato (opcao, &stack);
                 break;
             }
         }

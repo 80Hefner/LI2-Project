@@ -123,7 +123,13 @@ void ler_jogo (char *opcao, NODE **stack)
                 e.nivel = '3';
         }
 
-        fseek(f, 1, SEEK_CUR);
+        // Verifica se tem que saltar um espaço
+        fscanf(f, "%c", aux);
+
+        if (aux[0] == ' ') {
+            fseek(f, 1, SEEK_CUR);
+        }
+
 
         // Atualiza a grelha da variável e, conforme o ficheiro
         for (int i = 0; i < 8; i++){
@@ -139,7 +145,15 @@ void ler_jogo (char *opcao, NODE **stack)
                 else
                     e.grelha[i][j] = VAZIA;
             }
-            fseek(f, 1, SEEK_CUR);
+
+            fseek(f, -1, SEEK_CUR);
+
+            // Verifica se tem que saltar um espaço
+            fscanf(f, "%c", aux);
+
+            if (aux[0] == ' ') {
+                fseek(f, 1, SEEK_CUR);
+            }
         }
 
         e.score_o = conta_pontos(e, 'O');
@@ -163,8 +177,6 @@ void ler_jogo (char *opcao, NODE **stack)
             jogovsbot(opcao, e, stack);
 
     }
-
-
 
 }
 

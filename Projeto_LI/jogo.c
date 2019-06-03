@@ -116,6 +116,10 @@ void jogovsplayer(char *opcao, ESTADO e, NODE **stack)
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!\n");
     }
+    else if (verifica_fim_jogo(e) == 'E') {
+        opcao[0] = 'Q';
+        printf("\nEmpate!!!\n");
+    }
     else printf("Jogo interrompido.\n");
 
     reinicia_stack(stack);
@@ -190,6 +194,10 @@ void jogovsbot(char *opcao, ESTADO e, NODE ** stack)
     else if (verifica_fim_jogo(e) == 'O') {
         opcao[0] = 'Q';
         printf("\nO jogador O ganhou!!!\n");
+    }
+    else if (verifica_fim_jogo(e) == 'E') {
+        opcao[0] = 'Q';
+        printf("\nEmpate!!!\n");
     }
     else printf("Jogo interrompido.\n");
 
